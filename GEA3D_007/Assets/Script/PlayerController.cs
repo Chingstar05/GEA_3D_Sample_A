@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class PlayerMove : MonoBehaviour
@@ -31,9 +32,11 @@ public class PlayerMove : MonoBehaviour
 
     private CinemachineSwitche camSwitcher;
 
+    public int maxHP = 100;
 
+    private int currentHP;
 
-
+    public Slider hpSlider;
 
 
     // Start is called before the first frame update
@@ -42,6 +45,9 @@ public class PlayerMove : MonoBehaviour
         controller = GetComponent<CharacterController>();
         pov = virtualCamera.GetCinemachineComponent<CinemachinePOV>();
         camSwitcher = FindObjectOfType<CinemachineSwitche>();
+
+        currentHP = maxHP;
+        hpSlider.value = 1f;
 
     }
 
@@ -54,6 +60,12 @@ public class PlayerMove : MonoBehaviour
         {
             velocity.y = -2f;
         }
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            pov.m_HorizontalAxis.Value = transform.eulerAngles.y;
+            pov.m_VerticalAxis.Value = 0f;  
+        }   
 
 
         float x = Input.GetAxis("Horizontal");
@@ -104,7 +116,23 @@ public class PlayerMove : MonoBehaviour
 
 
     }
+    public void TakeDamage(int damage)
+    {
+        currentHP -= damage;
+        hpSlider.value = (float)currentHP / maxHP;
+
+        if(currentHP <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
+    }
 
     
+
 
 }

@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 10f;
     public float lifeTime = 2f;
-    public int damage = 3;
+    public int damage = 1;
 
     void Start()
     {
@@ -22,7 +22,9 @@ public class Projectile : MonoBehaviour
     {
         if(other.CompareTag("Enemy"))
         {
-            Destroy(other.gameObject);
+            Enemy en = other.GetComponent<Enemy>();
+            if (en != null) en.TakeDamage(damage);
+
 
             Destroy(gameObject);
         }
